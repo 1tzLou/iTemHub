@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>iTemHub – Clickable Prototype</title>
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--tx:#172233;--mut:#5b6676;--bd:#d9dfe8;--pri:#1d4a8a;--prt:#fff;--ok:#17794a;--warn:#a65f00;--bad:#b83a2e;--sel:#e6eef9;--pu:#7a45c2;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e141e;--card:#172130;--tx:#e6ebf3;--mut:#98a4b6;--bd:#2a3647;--pri:#6aa5f2;--prt:#0a1220;--ok:#4cc38a;--warn:#e8a33d;--bad:#f08174;--sel:#1c2c47;--pu:#b38cf0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e141e;--card:#172130;--tx:#e6ebf3;--mut:#98a4b6;--bd:#2a3647;--pri:#6aa5f2;--prt:#0a1220;--ok:#4cc38a;--warn:#e8a33d;--bad:#f08174;--sel:#1c2c47;--pu:#b38cf0;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.ban{font-size:12px;text-align:center;padding:4px 8px;background:var(--sel);color:var(--warn);border-bottom:1px solid var(--bd)}
+html{-webkit-text-size-adjust:100%}
+button,select{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#app{display:flex;min-height:100vh;min-height:100dvh}
+main{flex:1;min-width:0;max-width:1000px;padding:20px}
+.side{width:210px;flex:none;background:var(--card);border-right:1px solid var(--bd);padding:16px 12px;position:sticky;top:0;height:100vh}
+/* LOGO PLACEHOLDER: replace the text inside .logo with your own logo */
+.logo{font-weight:800;font-size:22px;color:var(--pri);margin:0 0 14px 8px}
+.nb{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:10px 12px;border-radius:8px;font:inherit;cursor:pointer}
+.nb.on{background:var(--sel);color:var(--pri);font-weight:700}
+.bnav{display:none;position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.bnav .nb{flex:1;text-align:center;font-size:11px;padding:8px 2px}
+.bnav i{display:block;font-style:normal;font-size:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+.top .logo{display:none;margin:0}
+h1{font-size:22px;margin:0}h2{margin:0 0 6px}h3{margin:20px 0 8px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.mu{color:var(--mut)}
+.note{background:var(--sel);border-left:4px solid var(--pri);padding:8px 12px;border-radius:6px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.stat b{font-size:30px;display:block}
+.btn{background:var(--pri);color:var(--prt);border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+.btn.sec{background:var(--sel);color:var(--pri)}.btn.sm{padding:5px 10px;font-size:13px}
+input,select,textarea{font:inherit;font-size:16px;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;max-width:100%}
+label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}
+label input,label select,label textarea{display:block;width:100%;margin-top:4px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center}.bar input{flex:1;min-width:140px}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd);vertical-align:top}th{color:var(--mut);font-size:12px;font-weight:600}
+.b{padding:2px 8px;border-radius:99px;font-size:12px;border:1px solid currentColor;white-space:nowrap}
+.g{color:var(--ok)}.w{color:var(--warn)}.r{color:var(--bad)}.bl{color:var(--pri)}.p{color:var(--pu)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.mod{width:100%;max-width:440px;max-height:90vh;overflow:auto}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.pick{max-width:640px;margin:7vh auto;padding:0 16px;text-align:center}
+.pick .logo{font-size:36px;margin:0 0 6px}
+.rc{text-align:left;cursor:pointer;color:var(--tx);font:inherit}.rc b{display:block;font-size:17px;color:var(--pri);margin-bottom:4px}
+#toast{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:30;font-size:14px;max-width:90%}
+@media(max-width:767px){
+.side{display:none}.bnav{display:flex}
+main{padding:12px 12px 96px}
+.top{flex-wrap:wrap}.top .logo{display:block}.top .mu{font-size:13px}
+.grid{grid-template-columns:repeat(2,1fr);gap:10px}.grid.roles{grid-template-columns:1fr}
+.stat b{font-size:26px}
+.btn{min-height:44px}.btn.sm{min-height:40px;padding:8px 12px}
+input,select,textarea{min-height:44px}
+.row .btn{white-space:nowrap}
+.bar{flex-direction:column;align-items:stretch}.bar>*{width:100%}.bar input{flex:none;min-width:0}
+.bnav .nb{min-height:58px;font-size:10.5px;line-height:1.2}
+.tw{overflow:visible;border:0;background:none}
+table,thead,tbody{display:block}thead{display:none}
+tr{display:block;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin-bottom:10px}
+td{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:5px 0;border:0}
+td::before{content:attr(data-label);color:var(--mut);font-size:12px;flex:none;padding-top:2px}
+td:first-child{font-weight:700}
+td.e{display:none}
+td[data-label=""]{justify-content:flex-end;border-top:1px solid var(--bd);margin-top:6px;padding-top:10px}
+td[data-label=""]::before{display:none}
+.v{text-align:right;min-width:0;overflow-wrap:anywhere}
+.ov{align-items:flex-end;padding:0}
+.mod{max-width:none;border-radius:16px 16px 0 0;max-height:92vh;max-height:92dvh;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.acts .btn{flex:1}
+.pick{margin:4vh auto}.pick .logo{font-size:32px}
+}
+</style></head><body>
+<div class="ban">Prototype - sample data only</div>
+<div id="app"></div><div id="modal"></div><div id="toast" role="status"></div>
+<script>
+const ME="Maria Santos",CO=["Good","Fair","Needs Repair"],ST=["Available","Borrowed"],can=i=>i.st==="Available"&&i.cond!=="Needs Repair";
+let items=[
+{id:1,name:"Scientific Calculator",cond:"Good",st:"Available"},{id:2,name:"HDMI Cable",cond:"Good",st:"Borrowed"},
+{id:3,name:"Extension Cord",cond:"Fair",st:"Available"},{id:4,name:"Portable Speaker",cond:"Good",st:"Borrowed"},
+{id:5,name:"Laptop Charger",cond:"Needs Repair",st:"Available"},{id:6,name:"Whiteboard Marker Set",cond:"Good",st:"Available"},
+{id:7,name:"Lab Gown (Medium)",cond:"Fair",st:"Available"},{id:8,name:"Projector Remote",cond:"Good",st:"Available"}];
+let borrows=[
+{id:1,item:2,who:"Juan Dela Cruz",on:"2026-10-28",ret:null},{id:2,item:4,who:ME,on:"2026-10-30",ret:null},
+{id:3,item:6,who:"Ana Reyes",on:"2026-10-20",ret:"2026-10-22"},{id:4,item:8,who:"Mark Lim",on:"2026-10-24",ret:"2026-10-26"},
+{id:5,item:1,who:"Ana Reyes",on:"2026-10-15",ret:"2026-10-16"}];
+let lf=[
+{id:1,type:"Lost",name:"Blue Umbrella",desc:"Folding umbrella, white handle",where:"Library",date:"2026-10-27",by:ME,st:"Open"},
+{id:2,type:"Found",name:"Black Wallet",desc:"Plain black wallet",where:"Canteen",date:"2026-10-28",by:"Personnel Demo",st:"Open"},
+{id:3,type:"Found",name:"Water Bottle",desc:"Green steel tumbler with stickers",where:"Room 305",date:"2026-10-29",by:"Ana Reyes",st:"Open"},
+{id:4,type:"Lost",name:"USB Flash Drive",desc:"Silver 32GB drive",where:"Computer Lab",date:"2026-10-30",by:"Mark Lim",st:"Open"},
+{id:5,type:"Found",name:"Keychain",desc:"Keys on a blue lanyard",where:"Gym",date:"2026-10-25",by:"Personnel Demo",st:"Claimed"}];
+let claims=[
+{id:1,lf:3,who:"Juan Dela Cruz",info:"Small dent near the bottom and my initials “JD” under the cap.",st:"Pending",date:"2026-10-30"},
+{id:2,lf:5,who:"Mark Lim",info:"The keys open my locker; the lanyard has my section tag.",st:"Approved",date:"2026-10-26"}];
+const S={role:null,v:"dash",q:"",fs:"",fc:"",lq:"",lt:"",ls:"",rt:"",pre:null};
+const $=s=>document.querySelector(s),E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const T=()=>new Date().toISOString().slice(0,10),P=()=>S.role==="P",who=()=>P()?"Personnel Demo":ME;
+const nid=a=>Math.max(0,...a.map(x=>x.id))+1,nm=id=>(items.find(i=>i.id===id)||{name:"Unknown"}).name;
+const C={Available:"g",Borrowed:"w",Returned:"bl",Lost:"r",Found:"p",Open:"w",Claimed:"g",Resolved:"g",Pending:"w",Approved:"g",Rejected:"r",Good:"g",Fair:"w","Needs Repair":"r",Borrowing:"w",Return:"bl",Claim:"p"};
+const B=s=>`<span class="b ${C[s]}">${s}</span>`;
+const O=(a,v,all)=>(all?`<option value="">${all}</option>`:"")+a.map(x=>`<option${x==v?" selected":""}>${x}</option>`).join("");
+const TB=(h,r)=>r.length?`<div class="tw"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${r.map(a=>`<tr>${a.map((c,j)=>`<td data-label="${h[j]}"${c===""?" class=e":""}><span class="v">${c}</span></td>`).join("")}</tr>`).join("")}</tbody></table></div>`:`<p class="mu">No records match.</p>`;
+const toast=m=>{const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2600)};
+const M=(t,b)=>{$("#modal").innerHTML=`<div class="ov" onclick="if(event.target===this)X()"><div class="card mod"><h2>${t}</h2>${b}</div></div>`},X=()=>{$("#modal").innerHTML=""};
+const AC=f=>`<div class="acts"><button class="btn sec" onclick="X()">Cancel</button><button class="btn" onclick="${f}">Save</button></div>`;
+const V={},LST={};
+V.role=()=>`<div class="pick"><div class="logo">iTemHub</div><p>School item borrowing and lost-and-found management</p><p class="mu">Demo login: choose a role. No password needed.</p><div class="grid roles"><button class="card rc" onclick="setRole('S')"><b>Student</b>Browse and borrow items, see your borrowings, report and claim lost-and-found items.</button><button class="card rc" onclick="setRole('P')"><b>Authorized Personnel</b>Manage items, record returns, review claims, and view reports.</button></div></div>`;
+V.dash=()=>{const c=s=>items.filter(i=>i.st===s).length,l=t=>lf.filter(x=>x.type===t&&x.st==="Open").length,pc=claims.filter(c=>c.st==="Pending").length;
+const d=[["Available",c("Available")],["Borrowed",c("Borrowed")],["Returned",borrows.filter(b=>b.ret).length],["Lost",l("Lost")],["Found",l("Found")]];
+return `<h1>Dashboard</h1><p class="mu">Returned counts completed returns. Lost and Found count open reports.</p><div class="grid">${d.map(([k,n])=>`<div class="card stat"><b>${n}</b>${B(k)}</div>`).join("")}</div>${P()?`<p>Claims waiting for review: <b>${pc}</b> <button class="btn sm sec" onclick="go('lf')">Review claims</button></p>`:""}`};
+V.items=()=>`<div class="row"><h1>Items</h1>${P()?`<button class="btn" onclick="itemForm(0)">+ Add item</button>`:""}</div><div class="bar"><input placeholder="Search items" value="${E(S.q)}" oninput="S.q=this.value;L()"><select onchange="S.fs=this.value;L()">${O(ST,S.fs,"All statuses")}</select><select onchange="S.fc=this.value;L()">${O(CO,S.fc,"All conditions")}</select></div><div id="list"></div>`;
+LST.items=()=>{const q=S.q.toLowerCase();return TB(["Item","Condition","Status",""],items.filter(i=>i.name.toLowerCase().includes(q)&&(!S.fs||i.st===S.fs)&&(!S.fc||i.cond===S.fc)).map(i=>[E(i.name),B(i.cond),B(i.st),(can(i)?`<button class="btn sm" onclick="${P()?"lend":"quick"}(${i.id})">Borrow</button> `:i.st==="Borrowed"?"":`<span class="mu">Needs repair</span> `)+(P()?`<button class="btn sm sec" onclick="itemForm(${i.id})">Edit</button>`:"")]))};
+function itemForm(id){const i=items.find(x=>x.id===id)||{name:"",cond:"Good"};M(id?"Edit item":"Add item",`<label>Item name<input id="m1" maxlength="60" value="${E(i.name)}"></label><label>Condition<select id="m2">${O(CO,i.cond)}</select></label>${AC(`saveItem(${id})`)}`)}
+function saveItem(id){const n=$("#m1").value.trim(),c=$("#m2").value;if(!n)return toast("Enter an item name.");if(items.some(x=>x.id!==id&&x.name.toLowerCase()===n.toLowerCase()))return toast("An item with that name already exists.");if(id){const i=items.find(x=>x.id===id);i.name=n;i.cond=c}else items.push({id:nid(items),name:n,cond:c,st:"Available"});X();R();toast("Item saved.")}
+V.borrow=()=>{const av=items.filter(can),pre=S.pre;S.pre=null;
+return `<h1>Borrowing and Returns</h1><div class="card" style="margin-top:12px"><b>Record a borrowing</b>${av.length?`<div class="bar">${P()?`<input id="bw" maxlength="60" placeholder="Borrower name">`:`<span>Borrower: <b>${ME}</b></span>`}<select id="bi">${av.map(i=>`<option value="${i.id}"${pre===i.id?" selected":""}>${E(i.name)}</option>`).join("")}</select><button class="btn" onclick="doBorrow()">Borrow</button></div>`:`<p class="mu">No items are available right now.</p>`}</div><h3>${P()?"All borrowings":"My borrowings"}</h3><div id="list"></div>`};
+LST.borrow=()=>TB(["Item","Borrower","Borrowed","Returned","Status",""],borrows.filter(b=>P()||b.who===ME).sort((a,b)=>b.on.localeCompare(a.on)||b.id-a.id).map(b=>[E(nm(b.item)),E(b.who),b.on,b.ret||"-",B(b.ret?"Returned":"Borrowed"),P()&&!b.ret?`<button class="btn sm" onclick="ret(${b.id})">Mark returned</button>`:""]));
+function borrow(id,w){const i=items.find(x=>x.id===id);if(!i)return;if(i.st==="Borrowed")return toast("That item is already borrowed.");if(i.cond==="Needs Repair")return toast("That item needs repair and can’t be borrowed.");i.st="Borrowed";borrows.push({id:nid(borrows),item:id,who:w,on:T(),ret:null});R();toast(`Borrowing recorded: ${i.name}.`)}
+function doBorrow(){const id=+($("#bi")||{}).value,w=P()?$("#bw").value.trim():ME;if(!id||!w)return toast("Choose an item and enter the borrower’s name.");borrow(id,w)}
+function ret(id){const b=borrows.find(x=>x.id===id);if(!b||b.ret)return toast("That borrowing is already returned.");b.ret=T();items.find(i=>i.id===b.item).st="Available";R();toast("Returned. The item is available again.")}
+const quick=id=>borrow(id,ME),lend=id=>{S.pre=id;go("borrow")};
+V.lf=()=>`<div class="row"><h1>Lost and Found</h1><button class="btn" onclick="lfForm()">+ Report item</button></div><p class="note">Ownership is not verified automatically. Authorized personnel review each claim using the claimant’s information or proof.</p><div class="bar"><input placeholder="Search reports" value="${E(S.lq)}" oninput="S.lq=this.value;L()"><select onchange="S.lt=this.value;L()">${O(["Lost","Found"],S.lt,"All types")}</select><select onchange="S.ls=this.value;L()">${O(["Open","Claimed","Resolved"],S.ls,"All statuses")}</select></div><div id="list"></div>`;
+LST.lf=()=>{const q=S.lq.toLowerCase(),r=lf.filter(x=>(!S.lt||x.type===S.lt)&&(!S.ls||x.st===S.ls)&&[x.name,x.desc,x.where,x.by].join(" ").toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+return TB(["Type","Item","Details","Date","Reported by","Status",""],r.map(x=>[B(x.type),E(x.name),E(x.desc)+(x.where?`<br><span class="mu">${E(x.where)}</span>`:""),x.date,E(x.by),B(x.st),x.st!=="Open"?"":x.type==="Found"?`<button class="btn sm" onclick="claimForm(${x.id})">Claim</button>`:P()?`<button class="btn sm sec" onclick="resolveLost(${x.id})">Mark resolved</button>`:""]))
++`<h3>${P()?"Claims for review":"My claims"}</h3>`+TB(["Found item","Claimant","Information or proof","Status",""],claims.filter(c=>P()||c.who===ME).map(c=>[E(lf.find(x=>x.id===c.lf).name),E(c.who),E(c.info)+(c.note?`<br><span class="mu">${E(c.note)}</span>`:""),B(c.st),P()&&c.st==="Pending"?`<button class="btn sm" onclick="decide(${c.id},1)">Approve</button> <button class="btn sm sec" onclick="decide(${c.id},0)">Reject</button>`:""]))};
+function resolveLost(id){const x=lf.find(r=>r.id===id);if(!x||x.type!=="Lost"||x.st!=="Open")return;x.st="Resolved";R();toast("Lost report marked as resolved.")}
+function lfForm(){M("Report a lost or found item",`<label>Type<select id="m1">${O(["Lost","Found"])}</select></label><label>Item name<input id="m2"></label><label>Description<textarea id="m3" rows="2"></textarea></label><label>Place<input id="m4"></label><label>Date<input id="m5" type="date" value="${T()}"></label>${AC("saveLf()")}`)}
+function saveLf(){const n=$("#m2").value.trim();if(!n)return toast("Enter the item name.");lf.push({id:nid(lf),type:$("#m1").value,name:n,desc:$("#m3").value.trim(),where:$("#m4").value.trim(),date:$("#m5").value||T(),by:who(),st:"Open"});X();R();toast("Report submitted.")}
+function claimForm(id){const f=lf.find(x=>x.id===id);M("Submit a claim",`<p>Claiming: <b>${E(f.name)}</b></p><label>Claimant name<input id="m1" value="${P()?"":ME}"${P()?"":" readonly"}></label><label>Information or proof of ownership<textarea id="m2" rows="3" placeholder="Describe marks, contents, or other proof."></textarea></label><p class="mu">Personnel will review this claim. Ownership is not checked automatically.</p>${AC(`saveClaim(${id})`)}`)}
+function saveClaim(id){const w=$("#m1").value.trim(),i=$("#m2").value.trim();if(!w||!i)return toast("Enter the claimant’s name and your proof.");const f=lf.find(x=>x.id===id);if(!f||f.st!=="Open")return toast("This item is no longer open for claims.");if(claims.some(c=>c.lf===id&&c.st==="Pending"&&c.who.toLowerCase()===w.toLowerCase()))return toast("This claimant already has a pending claim for this item.");claims.push({id:nid(claims),lf:id,who:w,info:i,st:"Pending",date:T()});X();R();toast("Claim submitted for review.")}
+function decide(id,ok){const c=claims.find(x=>x.id===id),f=lf.find(x=>x.id===c.lf);if(c.st!=="Pending")return toast("This claim was already decided.");let m="Claim rejected.";if(ok){if(f.st!=="Open")return toast("That item was already claimed.");f.st="Claimed";c.st="Approved";const o=claims.filter(x=>x.lf===f.id&&x.id!==c.id&&x.st==="Pending");o.forEach(x=>{x.st="Rejected";x.note="Automatically rejected: another claim was approved."});m="Claim approved."+(o.length?` ${o.length} other pending claim${o.length>1?"s were":" was"} rejected automatically.`:"")}else c.st="Rejected";R();toast(m)}
+V.rep=()=>{const n=(a,f)=>a.filter(f).length,k=[["Total borrowings",borrows.length],["Currently borrowed",n(borrows,b=>!b.ret)],["Items returned",n(borrows,b=>b.ret)],["Lost reports filed",n(lf,x=>x.type==="Lost")],["Found reports filed",n(lf,x=>x.type==="Found")],["Claims pending",n(claims,c=>c.st==="Pending")],["Claims approved",n(claims,c=>c.st==="Approved")],["Claims rejected",n(claims,c=>c.st==="Rejected")]];
+return `<h1>Reports</h1><p class="mu">On-screen summary computed from the sample data.</p><div class="grid">${k.map(([a,b])=>`<div class="card stat"><b>${b}</b>${a}</div>`).join("")}</div><div class="bar"><select onchange="S.rt=this.value;L()">${O(["Borrowing","Return","Lost","Found","Claim"],S.rt,"All activity")}</select></div><div id="list"></div>`};
+LST.rep=()=>{const a=[];borrows.forEach(b=>{a.push({d:b.on,t:"Borrowing",i:nm(b.item),p:b.who,s:"Borrowed"});if(b.ret)a.push({d:b.ret,t:"Return",i:nm(b.item),p:b.who,s:"Returned"})});
+lf.forEach(x=>a.push({d:x.date,t:x.type,i:x.name,p:x.by,s:x.st}));claims.forEach(c=>a.push({d:c.date,t:"Claim",i:lf.find(x=>x.id===c.lf).name,p:c.who,s:c.st}));
+const r=a.filter(x=>!S.rt||x.t===S.rt).reverse().sort((x,y)=>y.d.localeCompare(x.d)).map(x=>[x.d,B(x.t),E(x.i),E(x.p),B(x.s)]);return `<p class="mu">${r.length} record${r.length===1?"":"s"}</p>`+TB(["Date","Activity","Item","Person","Status"],r)};
+const NAV=[["dash","Dashboard","🏠"],["items","Items","📦"],["borrow","Borrowing","🔄"],["lf","Lost &amp; Found","🔎"],["rep","Reports","📊",1]];
+function R(){const a=$("#app");if(!S.role){a.innerHTML=V.role();return}
+const n=NAV.filter(x=>!x[3]||P()),nb=c=>n.map(x=>`<button class="nb${S.v===x[0]?" on":""}" onclick="go('${x[0]}')">${c?`<i>${x[2]}</i>`:""}${x[1]}</button>`).join("");
+a.innerHTML=`<aside class="side"><div class="logo">iTemHub</div>${nb(0)}</aside><main><div class="top"><div class="logo">iTemHub</div><span class="mu">${P()?"Authorized Personnel":"Student"} (demo)</span><button class="btn sm sec" onclick="out()">Switch role</button></div>${V[S.v]()}</main><nav class="bnav">${nb(1)}</nav>`;L()}
+const L=()=>{const e=$("#list");if(e)e.innerHTML=LST[S.v]()},go=v=>{S.v=v;R();scrollTo(0,0)},setRole=r=>{S.role=r;S.v="dash";R()},out=()=>{S.role=null;X();R()};
+R();
+</script></body></html>
